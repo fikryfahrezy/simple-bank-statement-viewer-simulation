@@ -5,29 +5,21 @@ import (
 	"log/slog"
 )
 
-func (s *transactionService) GetIssues(ctx context.Context, req GetIssuesRequest) ([]IssueResponse, int64, error) {
-	s.log.Info("Listing issues",
-		slog.Int("page", req.Page),
-		slog.Int("page_size", req.PageSize),
-	)
-
-	offset := (req.Page - 1) * req.PageSize
-
-	issues, total, err := s.transactionRepository.GetIssues(ctx, req.PageSize, offset)
+func (s *transactionService) GetIssues(ctx context.Context) ([]IssueResponse, error) {
+	issues, err := s.transactionRepository.GetAllIssues(ctx)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
-	var responses []IssueResponse
-	for _, issue := range issues {
-		response := ToIssuesListResponse(issue)
-		responses = append(responses, response)
+	responses := make([]IssueResponse, len(issues))
+	for i, issue := range issues {
+		response := ToIssuesResponse(issue)
+		responses[i] = response
 	}
 
 	s.log.Info("Issues listed successfully",
 		slog.Int("count", len(responses)),
-		slog.Int64("total", total),
 	)
 
-	return responses, total, nil
+	return responses, nil
 }

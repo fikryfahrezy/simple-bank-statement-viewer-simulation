@@ -22,21 +22,18 @@ type FakeTransactionService struct {
 		result1 service.BalanceResponse
 		result2 error
 	}
-	GetIssuesStub        func(context.Context, service.GetIssuesRequest) ([]service.IssueResponse, int64, error)
+	GetIssuesStub        func(context.Context) ([]service.IssueResponse, error)
 	getIssuesMutex       sync.RWMutex
 	getIssuesArgsForCall []struct {
 		arg1 context.Context
-		arg2 service.GetIssuesRequest
 	}
 	getIssuesReturns struct {
 		result1 []service.IssueResponse
-		result2 int64
-		result3 error
+		result2 error
 	}
 	getIssuesReturnsOnCall map[int]struct {
 		result1 []service.IssueResponse
-		result2 int64
-		result3 error
+		result2 error
 	}
 	UploadStatementStub        func(context.Context, service.UploadRequest) error
 	uploadStatementMutex       sync.RWMutex
@@ -118,24 +115,23 @@ func (fake *FakeTransactionService) GetBalanceReturnsOnCall(i int, result1 servi
 	}{result1, result2}
 }
 
-func (fake *FakeTransactionService) GetIssues(arg1 context.Context, arg2 service.GetIssuesRequest) ([]service.IssueResponse, int64, error) {
+func (fake *FakeTransactionService) GetIssues(arg1 context.Context) ([]service.IssueResponse, error) {
 	fake.getIssuesMutex.Lock()
 	ret, specificReturn := fake.getIssuesReturnsOnCall[len(fake.getIssuesArgsForCall)]
 	fake.getIssuesArgsForCall = append(fake.getIssuesArgsForCall, struct {
 		arg1 context.Context
-		arg2 service.GetIssuesRequest
-	}{arg1, arg2})
+	}{arg1})
 	stub := fake.GetIssuesStub
 	fakeReturns := fake.getIssuesReturns
-	fake.recordInvocation("GetIssues", []interface{}{arg1, arg2})
+	fake.recordInvocation("GetIssues", []interface{}{arg1})
 	fake.getIssuesMutex.Unlock()
 	if stub != nil {
-		return stub(arg1, arg2)
+		return stub(arg1)
 	}
 	if specificReturn {
-		return ret.result1, ret.result2, ret.result3
+		return ret.result1, ret.result2
 	}
-	return fakeReturns.result1, fakeReturns.result2, fakeReturns.result3
+	return fakeReturns.result1, fakeReturns.result2
 }
 
 func (fake *FakeTransactionService) GetIssuesCallCount() int {
@@ -144,46 +140,43 @@ func (fake *FakeTransactionService) GetIssuesCallCount() int {
 	return len(fake.getIssuesArgsForCall)
 }
 
-func (fake *FakeTransactionService) GetIssuesCalls(stub func(context.Context, service.GetIssuesRequest) ([]service.IssueResponse, int64, error)) {
+func (fake *FakeTransactionService) GetIssuesCalls(stub func(context.Context) ([]service.IssueResponse, error)) {
 	fake.getIssuesMutex.Lock()
 	defer fake.getIssuesMutex.Unlock()
 	fake.GetIssuesStub = stub
 }
 
-func (fake *FakeTransactionService) GetIssuesArgsForCall(i int) (context.Context, service.GetIssuesRequest) {
+func (fake *FakeTransactionService) GetIssuesArgsForCall(i int) context.Context {
 	fake.getIssuesMutex.RLock()
 	defer fake.getIssuesMutex.RUnlock()
 	argsForCall := fake.getIssuesArgsForCall[i]
-	return argsForCall.arg1, argsForCall.arg2
+	return argsForCall.arg1
 }
 
-func (fake *FakeTransactionService) GetIssuesReturns(result1 []service.IssueResponse, result2 int64, result3 error) {
+func (fake *FakeTransactionService) GetIssuesReturns(result1 []service.IssueResponse, result2 error) {
 	fake.getIssuesMutex.Lock()
 	defer fake.getIssuesMutex.Unlock()
 	fake.GetIssuesStub = nil
 	fake.getIssuesReturns = struct {
 		result1 []service.IssueResponse
-		result2 int64
-		result3 error
-	}{result1, result2, result3}
+		result2 error
+	}{result1, result2}
 }
 
-func (fake *FakeTransactionService) GetIssuesReturnsOnCall(i int, result1 []service.IssueResponse, result2 int64, result3 error) {
+func (fake *FakeTransactionService) GetIssuesReturnsOnCall(i int, result1 []service.IssueResponse, result2 error) {
 	fake.getIssuesMutex.Lock()
 	defer fake.getIssuesMutex.Unlock()
 	fake.GetIssuesStub = nil
 	if fake.getIssuesReturnsOnCall == nil {
 		fake.getIssuesReturnsOnCall = make(map[int]struct {
 			result1 []service.IssueResponse
-			result2 int64
-			result3 error
+			result2 error
 		})
 	}
 	fake.getIssuesReturnsOnCall[i] = struct {
 		result1 []service.IssueResponse
-		result2 int64
-		result3 error
-	}{result1, result2, result3}
+		result2 error
+	}{result1, result2}
 }
 
 func (fake *FakeTransactionService) UploadStatement(arg1 context.Context, arg2 service.UploadRequest) error {

@@ -9,5 +9,5 @@ import (
 type TransactionRepository interface {
 	Store(ctx context.Context, transaction model.Transaction) error
 	GetBalance(ctx context.Context) (float64, error)
-	GetIssues(ctx context.Context, limit, offset int) ([]model.Transaction, int64, error)
+	GetAllIssues(ctx context.Context) ([]model.Transaction, error)
 }

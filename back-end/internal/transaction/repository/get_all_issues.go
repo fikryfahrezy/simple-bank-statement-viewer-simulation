@@ -6,10 +6,10 @@ import (
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/model"
 )
 
-func (r *transactionRepository) GetIssues(ctx context.Context, limit, offset int) ([]model.Transaction, int64, error) {
+func (r *transactionRepository) GetAllIssues(ctx context.Context) ([]model.Transaction, error) {
 	transactionTable, ok := r.db.Table["transactions"]
 	if !ok {
-		return []model.Transaction{}, 0, ErrTransactionsTableNotFound
+		return []model.Transaction{}, ErrTransactionsTableNotFound
 	}
 
 	var transactions []model.Transaction
@@ -21,5 +21,5 @@ func (r *transactionRepository) GetIssues(ctx context.Context, limit, offset int
 		transactions = append(transactions, transaction)
 	}
 
-	return transactions, int64(len(transactions)), nil
+	return transactions, nil
 }

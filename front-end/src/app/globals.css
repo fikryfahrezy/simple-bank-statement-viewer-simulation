@@ -1,5 +1,13 @@
 :root {
-  --brand: #fd6542;
+  --color-brand: #fd6542;
+  --color-white: #fff;
+  --clolr-light-gray: #ccc;
+  --color-warning: #ffc126;
+  --color-error: #ef4444;
+
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: calc(infinity * 1px);
 }
 
 html,

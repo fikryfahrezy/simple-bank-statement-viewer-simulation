@@ -19,10 +19,14 @@ project-root/
     │            ├── index.tsx
     │            ├── index.test.tsx
     │            └── styles.module.css
-    └── services/
-        └── <service-name>/
-            ├── api-sdk.ts
-            └── api.types.ts
+    ├── hooks/
+    │   └── <hook-name>.ts
+    ├── services/
+    │    └── <service-name>/
+    │        ├── api-sdk.ts
+    │        └── api.types.ts
+    └── utils/
+        └── <util-name>.ts
 ```
 
 ### Prerequisites

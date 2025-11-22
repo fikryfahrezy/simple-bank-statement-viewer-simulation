@@ -1,0 +1,9 @@
+.zone {
+  border: 2px dashed var(--clolr-light-gray);
+  padding: 20px;
+  text-align: center;
+}
+
+.zoneHighlighted {
+  background-color: var(--color-brand);
+}

@@ -6,15 +6,13 @@ import (
 	"sync"
 
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/transaction/service"
-	"github.com/google/uuid"
 )
 
 type FakeTransactionService struct {
-	GetBalanceStub        func(context.Context, uuid.UUID) (service.BalanceResponse, error)
+	GetBalanceStub        func(context.Context) (service.BalanceResponse, error)
 	getBalanceMutex       sync.RWMutex
 	getBalanceArgsForCall []struct {
 		arg1 context.Context
-		arg2 uuid.UUID
 	}
 	getBalanceReturns struct {
 		result1 service.BalanceResponse
@@ -56,19 +54,18 @@ type FakeTransactionService struct {
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeTransactionService) GetBalance(arg1 context.Context, arg2 uuid.UUID) (service.BalanceResponse, error) {
+func (fake *FakeTransactionService) GetBalance(arg1 context.Context) (service.BalanceResponse, error) {
 	fake.getBalanceMutex.Lock()
 	ret, specificReturn := fake.getBalanceReturnsOnCall[len(fake.getBalanceArgsForCall)]
 	fake.getBalanceArgsForCall = append(fake.getBalanceArgsForCall, struct {
 		arg1 context.Context
-		arg2 uuid.UUID
-	}{arg1, arg2})
+	}{arg1})
 	stub := fake.GetBalanceStub
 	fakeReturns := fake.getBalanceReturns
-	fake.recordInvocation("GetBalance", []interface{}{arg1, arg2})
+	fake.recordInvocation("GetBalance", []interface{}{arg1})
 	fake.getBalanceMutex.Unlock()
 	if stub != nil {
-		return stub(arg1, arg2)
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
@@ -82,17 +79,17 @@ func (fake *FakeTransactionService) GetBalanceCallCount() int {
 	return len(fake.getBalanceArgsForCall)
 }
 
-func (fake *FakeTransactionService) GetBalanceCalls(stub func(context.Context, uuid.UUID) (service.BalanceResponse, error)) {
+func (fake *FakeTransactionService) GetBalanceCalls(stub func(context.Context) (service.BalanceResponse, error)) {
 	fake.getBalanceMutex.Lock()
 	defer fake.getBalanceMutex.Unlock()
 	fake.GetBalanceStub = stub
 }
 
-func (fake *FakeTransactionService) GetBalanceArgsForCall(i int) (context.Context, uuid.UUID) {
+func (fake *FakeTransactionService) GetBalanceArgsForCall(i int) context.Context {
 	fake.getBalanceMutex.RLock()
 	defer fake.getBalanceMutex.RUnlock()
 	argsForCall := fake.getBalanceArgsForCall[i]
-	return argsForCall.arg1, argsForCall.arg2
+	return argsForCall.arg1
 }
 
 func (fake *FakeTransactionService) GetBalanceReturns(result1 service.BalanceResponse, result2 error) {

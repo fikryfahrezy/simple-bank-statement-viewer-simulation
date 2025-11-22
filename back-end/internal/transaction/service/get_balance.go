@@ -2,16 +2,16 @@ package service
 
 import (
 	"context"
-
-	"github.com/google/uuid"
 )
 
-func (s *transactionService) GetBalance(ctx context.Context, id uuid.UUID) (BalanceResponse, error) {
-	balance, err := s.transactionRepository.GetBalance(ctx, id)
+func (s *transactionService) GetBalance(ctx context.Context) (BalanceResponse, error) {
+	balance, err := s.transactionRepository.GetBalance(ctx)
 	if err != nil {
 		return BalanceResponse{}, err
 	}
 
-	response := ToBalanceResponse(balance)
+	response := BalanceResponse{
+		Balance: balance,
+	}
 	return response, nil
 }

@@ -4,12 +4,10 @@ package service
 
 import (
 	"context"
-
-	"github.com/google/uuid"
 )
 
 type TransactionService interface {
 	UploadStatement(ctx context.Context, req UploadRequest) error
-	GetBalance(ctx context.Context, id uuid.UUID) (BalanceResponse, error)
+	GetBalance(ctx context.Context) (BalanceResponse, error)
 	GetIssues(ctx context.Context, req GetIssuesRequest) ([]IssueResponse, int64, error)
 }

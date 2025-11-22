@@ -11,11 +11,11 @@ import (
 // Upload upload bank statement file
 // @Summary Store a bank statement history
 // @Description Storing data from bank statement file
-// @Tags transaction
-// @Accept json
+// @Tags transactions
+// @Accept multipart/form-data
 // @Produce json
-// @Param upload body service.UploadRequest true "Upload file request"
-// @Success 201 {object} http_server.APIResponse{result=service.UploadResponse}
+// @Param file formData file true "CSV file (only file supported)"
+// @Success 201 {object} http_server.APIResponse{result=nil}
 // @Failure 400 {object} http_server.APIResponse
 // @Failure 500 {object} http_server.APIResponse
 // @Router /upload [post]

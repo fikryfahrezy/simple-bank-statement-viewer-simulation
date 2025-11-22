@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/http_server"
+	_ "github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/transaction/service"
 )
 
 // Issues retrieves a list of non-successful transactions
@@ -12,7 +13,7 @@ import (
 // @Tags transactions
 // @Accept json
 // @Produce json
-// @Success 200 {object} http_server.ListAPIResponse{result=[]service.IssueResponse}
+// @Success 200 {object} http_server.APIResponse{result=[]service.IssueResponse}
 // @Failure 500 {object} http_server.APIResponse
 // @Router /issues [get]
 func (h *TransactionHandler) Issues(w http.ResponseWriter, r *http.Request) {

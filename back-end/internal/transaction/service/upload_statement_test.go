@@ -2,6 +2,7 @@ package service_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/database"
@@ -9,14 +10,12 @@ import (
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/model"
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/transaction/repository"
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/transaction/service"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func TestTransactionService_CreateTransaction_Success(t *testing.T) {
 	// Setup
-	db, err := database.NewDB(map[any]map[any]any{
+	db, err := database.NewDB(map[any][]any{
 		"transactions": {},
 	})
 
@@ -27,36 +26,27 @@ func TestTransactionService_CreateTransaction_Success(t *testing.T) {
 	ctx := context.Background()
 
 	req := service.UploadRequest{
-		Name:     "John Doe",
-		Email:    "john@example.com",
-		Password: "password123",
+		File: strings.NewReader("1624507883, JOHN DOE, DEBIT, 250000, SUCCESS, restaurant"),
 	}
 
-	transactions := db.Table["transactions"]
-	assert.Equal(t, 0, len(transactions))
+	prevTransactions := db.Table["transactions"]
+	assert.Equal(t, 0, len(prevTransactions))
 
-	result, err := transactionService.UploadStatement(ctx, req)
-
+	err = transactionService.UploadStatement(ctx, req)
 	assert.NoError(t, err)
-	assert.Equal(t, req.Name, result.Name)
-	assert.Equal(t, req.Email, result.Email)
-	// Note: Current service implementation has a design issue - ID and timestamps
-	// are not populated in the response because the repository modifies a copy of the struct
-	assert.Equal(t, uuid.Nil, result.ID) // This shows the current bug
-	assert.Zero(t, result.CreatedAt)     // This shows the current bug
-	assert.Zero(t, result.UpdatedAt)     // This shows the current bug
 
-	assert.Equal(t, 1, len(transactions))
+	newTransactions := db.Table["transactions"]
+	assert.Equal(t, 1, len(newTransactions))
 
 	var actualTransaction model.Transaction
-	for _, transaction := range transactions {
+	for _, transaction := range newTransactions {
 		actualTransaction = transaction.(model.Transaction)
 	}
 
-	assert.Equal(t, req.Name, actualTransaction.Name)
-	assert.Equal(t, req.Email, actualTransaction.Email)
-	// Verify password was hashed
-	assert.NotEqual(t, req.Password, actualTransaction.Password)
-	err = bcrypt.CompareHashAndPassword([]byte(actualTransaction.Password), []byte(req.Password))
-	assert.NoError(t, err)
+	assert.Equal(t, int64(1624507883), actualTransaction.Timestamp)
+	assert.Equal(t, "JOHN DOE", actualTransaction.Name)
+	assert.Equal(t, model.TransactionTypeDebit, actualTransaction.Type)
+	assert.Equal(t, float64(250000), actualTransaction.Amount)
+	assert.Equal(t, model.TransactionStatusSuccess, actualTransaction.Status)
+	assert.Equal(t, "restaurant", actualTransaction.Description)
 }

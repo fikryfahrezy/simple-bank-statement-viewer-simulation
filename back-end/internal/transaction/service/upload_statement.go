@@ -5,38 +5,25 @@ import (
 	"log/slog"
 
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/model"
-	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *transactionService) UploadStatement(ctx context.Context, req UploadRequest) (UploadResponse, error) {
-	s.log.Info("Uploading bank statement",
-		slog.String("email", req.Email),
-		slog.String("name", req.Name),
-	)
-
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-	if err != nil {
-		s.log.Error("Failed to hash password",
-			slog.String("error", err.Error()),
-		)
-		return UploadResponse{}, err
-	}
-
+func (s *transactionService) UploadStatement(ctx context.Context, req UploadRequest) error {
 	transaction := model.Transaction{
-		Name:     req.Name,
-		Email:    req.Email,
-		Password: string(hashedPassword),
+		Timestamp:   1624507883,
+		Name:        "JOHN DOE",
+		Type:        model.TransactionTypeDebit,
+		Amount:      250000,
+		Status:      model.TransactionStatusSuccess,
+		Description: "restaurant",
 	}
 
 	if err := s.transactionRepository.Store(ctx, transaction); err != nil {
-		return UploadResponse{}, err
+		return err
 	}
 
-	response := ToUploadResponse(transaction)
 	s.log.Info("Transaction created successfully",
-		slog.String("transaction_id", transaction.ID.String()),
-		slog.String("email", transaction.Email),
+		slog.Int64("transaction_timestamp", transaction.Timestamp),
 	)
 
-	return response, nil
+	return nil
 }

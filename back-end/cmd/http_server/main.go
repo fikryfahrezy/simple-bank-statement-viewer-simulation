@@ -46,7 +46,7 @@ func main() {
 		slog.Int("server_port", cfg.Server.Port),
 	)
 
-	db, err := database.NewDB(map[any]map[any]any{
+	db, err := database.NewDB(map[any][]any{
 		"transactions": {},
 	})
 	if err != nil {

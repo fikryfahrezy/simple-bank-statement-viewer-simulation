@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"log/slog"
 	"net/http"
 
@@ -21,23 +20,43 @@ import (
 // @Failure 500 {object} http_server.APIResponse
 // @Router /upload [post]
 func (h *TransactionHandler) Upload(w http.ResponseWriter, r *http.Request) {
-	var req service.UploadRequest
-
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&req)
+	err := r.ParseMultipartForm(32 << 20) // 32 MB limit
 	if err != nil {
-		h.log.Error("Failed to bind request",
-			slog.String("error", err.Error()),
-		)
-		http_server.BadRequestResponse(w, "Invalid request format", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	resp, err := h.transactionService.UploadStatement(r.Context(), req)
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	defer func() {
+		if err := file.Close(); err != nil {
+			h.log.Error("Failed to close the file",
+				slog.String("error", err.Error()))
+		}
+	}()
+
+	if header.Filename == "" {
+		http_server.BadRequestResponse(w, "no file provided", err)
+		return
+	}
+
+	if header.Header.Get("Content-Type") != "text/csv" {
+		http_server.BadRequestResponse(w, "file expected to be csv", err)
+		return
+	}
+
+	req := service.UploadRequest{
+		File: file,
+	}
+
+	err = h.transactionService.UploadStatement(r.Context(), req)
 	if err != nil {
 		h.translateServiceError(w, err, "Failed to upload statement")
 		return
 	}
 
-	http_server.CreatedResponse(w, "Statement uploaded successfully", resp)
+	http_server.CreatedResponse(w, "Statement uploaded successfully", nil)
 }

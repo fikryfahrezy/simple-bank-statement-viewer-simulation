@@ -14,29 +14,6 @@ type APIResponse struct {
 	Result      any            `json:"result"`
 }
 
-// ListAPIResponse represents a paginated API response
-type ListAPIResponse struct {
-	Message     string              `json:"message"`
-	Error       string              `json:"error"`
-	ErrorFields map[string]any      `json:"error_fields"`
-	Result      any                 `json:"result"`
-	Pagination  *PaginationResponse `json:"pagination,omitempty"`
-}
-
-// PaginationResponse represents pagination metadata
-type PaginationResponse struct {
-	TotalData  int64 `json:"total_data"`
-	TotalPages int64 `json:"total_pages"`
-	Page       int   `json:"page"`
-	Limit      int   `json:"limit"`
-}
-
-// PaginationRequest represents pagination input parameters
-type PaginationRequest struct {
-	Page     int `json:"page"`
-	PageSize int `json:"page_size"`
-}
-
 func SuccessResponse(w http.ResponseWriter, message string, data any) {
 	JSON(w, http.StatusOK, APIResponse{
 		Message: message,
@@ -50,15 +27,6 @@ func CreatedResponse(w http.ResponseWriter, message string, data any) {
 		Message: message,
 		Error:   "",
 		Result:  data,
-	})
-}
-
-func ListSuccessResponse(w http.ResponseWriter, message string, data any, pagination PaginationResponse) {
-	JSON(w, http.StatusOK, ListAPIResponse{
-		Message:    message,
-		Error:      "",
-		Result:     data,
-		Pagination: &pagination,
 	})
 }
 
@@ -95,10 +63,6 @@ func BadRequestResponse(w http.ResponseWriter, message string, err error) {
 	ErrorResponse(w, http.StatusBadRequest, message, err)
 }
 
-func NotFoundResponse(w http.ResponseWriter, message string, err error) {
-	ErrorResponse(w, http.StatusNotFound, message, err)
-}
-
 func InternalServerErrorResponse(w http.ResponseWriter, message string, err error) {
 	ErrorResponse(w, http.StatusInternalServerError, message, err)
 }
@@ -110,14 +74,4 @@ func ValidationErrorResponse(w http.ResponseWriter, message string, errorFields 
 		Error:       http.StatusText(http.StatusUnprocessableEntity),
 		ErrorFields: errorFields,
 	})
-}
-
-// CreatePaginationResponse creates a pagination response object
-func CreatePaginationResponse(totalData, totalPages int64, page, limit int) PaginationResponse {
-	return PaginationResponse{
-		TotalData:  totalData,
-		TotalPages: totalPages,
-		Page:       page,
-		Limit:      limit,
-	}
 }

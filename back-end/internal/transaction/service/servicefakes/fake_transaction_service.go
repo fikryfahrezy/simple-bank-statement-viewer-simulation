@@ -40,19 +40,17 @@ type FakeTransactionService struct {
 		result2 int64
 		result3 error
 	}
-	UploadStatementStub        func(context.Context, service.UploadRequest) (service.UploadResponse, error)
+	UploadStatementStub        func(context.Context, service.UploadRequest) error
 	uploadStatementMutex       sync.RWMutex
 	uploadStatementArgsForCall []struct {
 		arg1 context.Context
 		arg2 service.UploadRequest
 	}
 	uploadStatementReturns struct {
-		result1 service.UploadResponse
-		result2 error
+		result1 error
 	}
 	uploadStatementReturnsOnCall map[int]struct {
-		result1 service.UploadResponse
-		result2 error
+		result1 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
@@ -191,7 +189,7 @@ func (fake *FakeTransactionService) GetIssuesReturnsOnCall(i int, result1 []serv
 	}{result1, result2, result3}
 }
 
-func (fake *FakeTransactionService) UploadStatement(arg1 context.Context, arg2 service.UploadRequest) (service.UploadResponse, error) {
+func (fake *FakeTransactionService) UploadStatement(arg1 context.Context, arg2 service.UploadRequest) error {
 	fake.uploadStatementMutex.Lock()
 	ret, specificReturn := fake.uploadStatementReturnsOnCall[len(fake.uploadStatementArgsForCall)]
 	fake.uploadStatementArgsForCall = append(fake.uploadStatementArgsForCall, struct {
@@ -206,9 +204,9 @@ func (fake *FakeTransactionService) UploadStatement(arg1 context.Context, arg2 s
 		return stub(arg1, arg2)
 	}
 	if specificReturn {
-		return ret.result1, ret.result2
+		return ret.result1
 	}
-	return fakeReturns.result1, fakeReturns.result2
+	return fakeReturns.result1
 }
 
 func (fake *FakeTransactionService) UploadStatementCallCount() int {
@@ -217,7 +215,7 @@ func (fake *FakeTransactionService) UploadStatementCallCount() int {
 	return len(fake.uploadStatementArgsForCall)
 }
 
-func (fake *FakeTransactionService) UploadStatementCalls(stub func(context.Context, service.UploadRequest) (service.UploadResponse, error)) {
+func (fake *FakeTransactionService) UploadStatementCalls(stub func(context.Context, service.UploadRequest) error) {
 	fake.uploadStatementMutex.Lock()
 	defer fake.uploadStatementMutex.Unlock()
 	fake.UploadStatementStub = stub
@@ -230,30 +228,27 @@ func (fake *FakeTransactionService) UploadStatementArgsForCall(i int) (context.C
 	return argsForCall.arg1, argsForCall.arg2
 }
 
-func (fake *FakeTransactionService) UploadStatementReturns(result1 service.UploadResponse, result2 error) {
+func (fake *FakeTransactionService) UploadStatementReturns(result1 error) {
 	fake.uploadStatementMutex.Lock()
 	defer fake.uploadStatementMutex.Unlock()
 	fake.UploadStatementStub = nil
 	fake.uploadStatementReturns = struct {
-		result1 service.UploadResponse
-		result2 error
-	}{result1, result2}
+		result1 error
+	}{result1}
 }
 
-func (fake *FakeTransactionService) UploadStatementReturnsOnCall(i int, result1 service.UploadResponse, result2 error) {
+func (fake *FakeTransactionService) UploadStatementReturnsOnCall(i int, result1 error) {
 	fake.uploadStatementMutex.Lock()
 	defer fake.uploadStatementMutex.Unlock()
 	fake.UploadStatementStub = nil
 	if fake.uploadStatementReturnsOnCall == nil {
 		fake.uploadStatementReturnsOnCall = make(map[int]struct {
-			result1 service.UploadResponse
-			result2 error
+			result1 error
 		})
 	}
 	fake.uploadStatementReturnsOnCall[i] = struct {
-		result1 service.UploadResponse
-		result2 error
-	}{result1, result2}
+		result1 error
+	}{result1}
 }
 
 func (fake *FakeTransactionService) Invocations() map[string][][]interface{} {

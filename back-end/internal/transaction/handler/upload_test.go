@@ -2,46 +2,48 @@ package handler_test
 
 import (
 	"bytes"
-	"encoding/json"
+	"io"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
-	"time"
 
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/logger"
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/transaction/handler"
-	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/transaction/service"
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/transaction/service/servicefakes"
-	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestTransactionHandler_Upload_Success(t *testing.T) {
 	mockService := &servicefakes.FakeTransactionService{}
-	transactionID := uuid.New()
-	expectedResponse := service.UploadResponse{
-		ID:        transactionID,
-		Name:      "John Doe",
-		Email:     "john@example.com",
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}
-	mockService.UploadStatementReturns(expectedResponse, nil)
+	mockService.UploadStatementReturns(nil)
 
 	transactionHandler := handler.NewTransactionHandler(logger.NewDiscardLogger(), mockService)
 
-	requestBody := service.UploadRequest{
-		Name:     "John Doe",
-		Email:    "john@example.com",
-		Password: "password123",
-	}
-	body, err := json.Marshal(requestBody)
-	require.NoError(t, err)
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreatePart(
+		map[string][]string{
+			"Content-Disposition": {
+				`form-data; name="file"; filename="statement.csv"`,
+			},
+			"Content-Type": {
+				"text/csv",
+			},
+		},
+	)
+	assert.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPost, "/upload", bytes.NewBuffer(body))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	file := strings.NewReader("1624507883, JOHN DOE, DEBIT, 250000, SUCCESS, restaurant")
+	_, err = io.Copy(part, file)
+	assert.NoError(t, err)
+
+	err = writer.Close()
+	assert.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/upload", body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
 	rec := httptest.NewRecorder()
 	handler := http.HandlerFunc(transactionHandler.Upload)
 	handler.ServeHTTP(rec, req)
@@ -50,8 +52,4 @@ func TestTransactionHandler_Upload_Success(t *testing.T) {
 
 	// Verify service was called
 	assert.Equal(t, 1, mockService.UploadStatementCallCount())
-	_, actualReq := mockService.UploadStatementArgsForCall(0)
-	assert.Equal(t, requestBody.Name, actualReq.Name)
-	assert.Equal(t, requestBody.Email, actualReq.Email)
-	assert.Equal(t, requestBody.Password, actualReq.Password)
 }

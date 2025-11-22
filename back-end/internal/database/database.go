@@ -7,10 +7,10 @@ import (
 
 type DB struct {
 	mu    sync.Mutex
-	Table map[any]map[any]any
+	Table map[any][]any
 }
 
-func NewDB(table map[any]map[any]any) (*DB, error) {
+func NewDB(table map[any][]any) (*DB, error) {
 	return &DB{Table: table}, nil
 }
 

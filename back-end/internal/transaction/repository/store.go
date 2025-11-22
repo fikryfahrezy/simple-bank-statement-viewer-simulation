@@ -4,10 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"time"
 
 	"github.com/fikryfahrezy/simple-bank-statement-viewer-simulation/internal/model"
-	"github.com/google/uuid"
 )
 
 func (r *transactionRepository) Store(ctx context.Context, transaction model.Transaction) error {
@@ -16,20 +14,15 @@ func (r *transactionRepository) Store(ctx context.Context, transaction model.Tra
 		return ErrTransactionsTableNotFound
 	}
 
-	now := time.Now()
-	transaction.CreatedAt = now
-	transaction.UpdatedAt = now
-
-	// Generate UUIDv7 for the transaction ID
-	transactionID := uuid.Must(uuid.NewV7())
-	transaction.ID = transactionID
-
 	if err := r.db.BeginTx(); err != nil {
 		r.log.Error("Failed to begin transaction", "error", err.Error())
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
 
-	transactions[transactionID.String()] = transaction
+	transactions = append(transactions, transaction)
+	r.db.Table["transactions"] = transactions
+
+	fmt.Println(len(r.db.Table["transactions"]))
 
 	if err := r.db.Commit(); err != nil {
 		r.log.Error("Failed to commit transaction", "error", err.Error())
@@ -37,8 +30,7 @@ func (r *transactionRepository) Store(ctx context.Context, transaction model.Tra
 	}
 
 	r.log.Info("Transaction created successfully",
-		slog.String("transaction_id", transactionID.String()),
-		slog.String("email", transaction.Email),
+		slog.Int64("transaction_timestamp", transaction.Timestamp),
 	)
 
 	return nil

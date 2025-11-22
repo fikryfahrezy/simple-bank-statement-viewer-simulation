@@ -1,16 +1,25 @@
 package model
 
-import (
-	"time"
+type TransactionType string
 
-	"github.com/google/uuid"
+const (
+	TransactionTypeDebit  TransactionType = "DEBIT"
+	TransactionTypeCredit TransactionType = "CREDIT"
+)
+
+type TransactionStatus string
+
+const (
+	TransactionStatusSuccess TransactionStatus = "SUCCESS"
+	TransactionStatusPending TransactionStatus = "PENDING"
+	TransactionStatusFailed  TransactionStatus = "FAILED"
 )
 
 type Transaction struct {
-	ID        uuid.UUID
-	Name      string
-	Email     string
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Timestamp   int64
+	Name        string
+	Type        TransactionType
+	Amount      float64
+	Status      TransactionStatus
+	Description string
 }

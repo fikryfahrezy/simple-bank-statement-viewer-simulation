@@ -12,20 +12,19 @@ export function useUploadStatement() {
   const [error, setError] = useState<Error | null>(null);
   const [response, setResponse] = useState<IssueResponse[] | null>(null);
 
-  const request = (
+  const request = async (
     ...params: Parameters<typeof transactionService.uploadStatement>
   ) => {
     setState("loading");
-    transactionService.uploadStatement(...params).then((response) => {
-      const [result, error] = response;
-      if (error) {
-        setState("error");
-        setError(error);
-        return;
-      }
-      setState("idle");
-      setResponse(result);
-    });
+    const response = await transactionService.uploadStatement(...params);
+    const [result, error] = response;
+    if (error) {
+      setState("error");
+      setError(error);
+      return;
+    }
+    setState("idle");
+    setResponse(result);
 
     return response;
   };
@@ -38,20 +37,19 @@ export function useGetIssues() {
   const [error, setError] = useState<Error | null>(null);
   const [response, setResponse] = useState<IssueResponse[] | null>(null);
 
-  const request = (
+  const request = async (
     ...params: Parameters<typeof transactionService.getIssues>
   ) => {
     setState("loading");
-    transactionService.getIssues(...params).then((response) => {
-      const [result, error] = response;
-      if (error) {
-        setState("error");
-        setError(error);
-        return;
-      }
-      setState("idle");
-      setResponse(result);
-    });
+    const response = await transactionService.getIssues(...params);
+    const [result, error] = response;
+    if (error) {
+      setState("error");
+      setError(error);
+      return;
+    }
+    setState("idle");
+    setResponse(result);
 
     return response;
   };
@@ -64,20 +62,19 @@ export function useGetBalance() {
   const [error, setError] = useState<Error | null>(null);
   const [response, setResponse] = useState<BalanceResponse | null>(null);
 
-  const request = (
+  const request = async (
     ...params: Parameters<typeof transactionService.getBalance>
   ) => {
     setState("loading");
-    transactionService.getBalance(...params).then((response) => {
-      const [result, error] = response;
-      if (error) {
-        setState("error");
-        setError(error);
-        return;
-      }
-      setState("idle");
-      setResponse(result);
-    });
+    const response = await transactionService.getBalance(...params);
+    const [result, error] = response;
+    if (error) {
+      setState("error");
+      setError(error);
+      return;
+    }
+    setState("idle");
+    setResponse(result);
 
     return response;
   };

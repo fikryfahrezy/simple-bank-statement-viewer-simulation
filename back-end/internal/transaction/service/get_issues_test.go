@@ -44,23 +44,15 @@ func TestTransactionService_GetIssues_Success(t *testing.T) {
 	result, err := transactionService.GetIssues(ctx)
 
 	assert.NoError(t, err)
-	assert.Len(t, result, 2)
+	assert.Len(t, result, 1)
 
 	// Verify first transaction
-	assert.Equal(t, time.Time(time.Date(2021, time.June, 24, 4, 11, 23, 0, time.UTC)), result[0].Timestamp)
-	assert.Equal(t, firstTransaction.Name, result[0].Name)
-	assert.Equal(t, firstTransaction.Type, result[0].Type)
-	assert.Equal(t, firstTransaction.Amount, result[0].Amount)
-	assert.Equal(t, firstTransaction.Status, result[0].Status)
-	assert.Equal(t, firstTransaction.Description, result[0].Description)
-
-	// Verify second transaction
-	assert.Equal(t, time.Time(time.Date(2021, time.June, 25, 8, 0, 50, 0, time.UTC)), result[1].Timestamp)
-	assert.Equal(t, secondTransaction.Name, result[1].Name)
-	assert.Equal(t, secondTransaction.Type, result[1].Type)
-	assert.Equal(t, secondTransaction.Amount, result[1].Amount)
-	assert.Equal(t, secondTransaction.Status, result[1].Status)
-	assert.Equal(t, secondTransaction.Description, result[1].Description)
+	assert.Equal(t, time.Time(time.Date(2021, time.June, 25, 8, 0, 50, 0, time.UTC)), result[0].Timestamp)
+	assert.Equal(t, secondTransaction.Name, result[0].Name)
+	assert.Equal(t, secondTransaction.Type, result[0].Type)
+	assert.Equal(t, secondTransaction.Amount, result[0].Amount)
+	assert.Equal(t, secondTransaction.Status, result[0].Status)
+	assert.Equal(t, secondTransaction.Description, result[0].Description)
 }
 
 func TestTransactionService_GetIssues_EmptyResult(t *testing.T) {

@@ -18,7 +18,10 @@ func (r *transactionRepository) GetAllIssues(ctx context.Context) ([]model.Trans
 		if !ok {
 			continue
 		}
-		transactions = append(transactions, transaction)
+
+		if transaction.Status == model.TransactionStatusFailed || transaction.Status == model.TransactionStatusPending {
+			transactions = append(transactions, transaction)
+		}
 	}
 
 	return transactions, nil

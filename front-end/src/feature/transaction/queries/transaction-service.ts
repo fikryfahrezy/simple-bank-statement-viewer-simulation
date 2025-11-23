@@ -25,6 +25,7 @@ export function useUploadStatement() {
     }
     setState("idle");
     setResponse(result);
+    setError(null);
 
     return response;
   };
@@ -50,6 +51,7 @@ export function useGetIssues() {
     }
     setState("idle");
     setResponse(result);
+    setError(null);
 
     return response;
   };
@@ -75,6 +77,7 @@ export function useGetBalance() {
     }
     setState("idle");
     setResponse(result);
+    setError(null);
 
     return response;
   };

@@ -3,7 +3,7 @@ export type Result<TData, TError> = [TData, null] | [null, TError];
 export type Response<TData> = {
   message: string;
   error: string;
-  error_fields: Record<string, unknown>;
+  error_fields: Record<string, string[]>;
   result: TData;
 };
 

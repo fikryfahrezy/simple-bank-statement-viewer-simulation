@@ -2,11 +2,11 @@ import { BalanceResponse, IssueResponse, Response, Result } from "./api.types";
 
 export class APIError extends Error {
   code: string;
-  errorFields: Record<string, unknown> | null;
+  errorFields: Record<string, string[]> | null;
   constructor(
     code: string,
     message: string,
-    errorFields: Record<string, unknown> | null,
+    errorFields: Record<string, string[]> | null,
   ) {
     super(message);
     this.name = "APIError";

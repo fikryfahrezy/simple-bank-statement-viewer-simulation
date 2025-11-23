@@ -18,6 +18,7 @@ import { IssueResponse } from "@/services/transaction/api.types";
 import { idrFormatter } from "@/utils/currency";
 import { ErrorMessage } from "@/components/error-message";
 import { UploadStatement } from "@/feature/transaction/components/upload-statement";
+import { APIError } from "@/services/transaction/api-sdk";
 
 export default function Page() {
   const {
@@ -131,15 +132,43 @@ export default function Page() {
                 : idrFormatter(balance)}
             </p>
             {balanceError && (
-              <ErrorMessage>{balanceError.message}</ErrorMessage>
+              <p>
+                Failed to load balance:{" "}
+                <ErrorMessage>{balanceError.message}</ErrorMessage>
+              </p>
             )}
           </div>
           <UploadStatement
             loading={uploadState === "loading"}
             onUpload={onUploadStatement}
           />
-          {uploadError && <ErrorMessage>{uploadError.message}</ErrorMessage>}
         </div>
+
+        {uploadError && uploadError instanceof APIError && (
+          <div>
+            <p>Failed to upload statement:</p>
+            <ul className={styles.uploadErrorList}>
+              {Object.entries(uploadError.errorFields ?? {}).map(
+                ([key, messages]) => {
+                  return (
+                    <li key={key}>
+                      <ErrorMessage>{key}</ErrorMessage>
+                      <ul className={styles.uploadErrorMessages}>
+                        {messages.map((message) => {
+                          return (
+                            <li key={message}>
+                              <ErrorMessage>{message}</ErrorMessage>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </li>
+                  );
+                },
+              )}
+            </ul>
+          </div>
+        )}
         <TransactionTable
           rows={pagedData}
           sortKey={sortKey}
@@ -147,7 +176,12 @@ export default function Page() {
           onSortChange={onSortChange}
           loading={issuesState === "loading"}
         />
-        {issuesError && <ErrorMessage>{issuesError.message}</ErrorMessage>}
+        {issuesError && (
+          <p>
+            Failed to load data:{" "}
+            <ErrorMessage>{issuesError.message}</ErrorMessage>
+          </p>
+        )}
         <div className={styles.footer}>
           <p>
             Showing {currentPage} of {totalPages}

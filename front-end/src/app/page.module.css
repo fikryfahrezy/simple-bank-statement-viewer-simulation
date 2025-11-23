@@ -28,6 +28,16 @@
   font-weight: 700;
 }
 
+.uploadErrorList {
+  list-style: none;
+  max-height: 100px;
+  overflow: auto;
+}
+
+.uploadErrorMessages {
+  padding-left: 15px;
+}
+
 .footer {
   display: flex;
   align-items: flex-end;

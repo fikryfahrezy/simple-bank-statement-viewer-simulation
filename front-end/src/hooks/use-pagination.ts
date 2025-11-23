@@ -18,7 +18,7 @@ export function usePagination<TData extends object>({
   const firstPage = Math.max(1, lastPage - 4);
 
   const offset = (currentPage - 1) * limit;
-  const pagedData = data.slice(offset, limit);
+  const pagedData = data.slice(offset, offset+limit);
 
   const goToPage = (page: number): void => {
     handlePageChange(page);

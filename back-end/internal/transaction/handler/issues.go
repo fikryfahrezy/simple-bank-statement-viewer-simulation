@@ -9,7 +9,7 @@ import (
 
 // Issues retrieves a list of non-successful transactions
 // @Summary List non-successful transactions
-// @Description Retrieve a paginated list of non-successful transactions
+// @Description Retrieve a list of non-successful transactions
 // @Tags transactions
 // @Accept json
 // @Produce json

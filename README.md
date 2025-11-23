@@ -1,5 +1,8 @@
 # Simple Bank Statement Viewer Simulation
 
+Web : https://bank-statement-viewer.fahrezy.work
+API : https://api-bank-statement-viewer.fahrezy.work/swagger
+
 ## Front End
 
 ### Project Structure
@@ -7,25 +10,25 @@
 ```
 project-root/
 └── src/
-    ├── app
-    ├── components/
+    ├── app                             # Next.js default directory for routing
+    ├── components/                     # Shareable global component accross the project
     │   └── <component-name>/
     │       ├── index.tsx
     │       ├── index.test.tsx
     │       └── styles.module.css
-    ├── features/
+    ├── features/                       # Feature / domain specific code (components, hooks, utils, etc)
     │   └── <feature-name>/
     │        └── <components>/
     │            ├── index.tsx
     │            ├── index.test.tsx
     │            └── styles.module.css
-    ├── hooks/
+    ├── hooks/                          # Shareable global React's cusom hook accross the project
     │   └── <hook-name>.ts
-    ├── services/
+    ├── services/                       # SDK for external API service
     │    └── <service-name>/
     │        ├── api-sdk.ts
     │        └── api.types.ts
-    └── utils/
+    └── utils/                          # Shareable utility function
         └── <util-name>.ts
 ```
 
@@ -84,8 +87,6 @@ pnpm build
 ```
 
 ## Back End
-
-A 3-tier Go application built with net/http framework and structured logging using slog.
 
 ### Project Structure
 
@@ -177,4 +178,10 @@ docker compose up --build
 make build-production
 ```
 
+## Architecture decisions
 
+- Use `Next.js` for front-end to support different rendering in the future. For now it's use client side rendering, by using meta-framework that already support for SSR / SSG, it unlock the potential for use different rendering approach. Other advantage of using meta-framework, it give developer an out-of-the box tools like routing or ready to use custom hooks to interact with the components on the web (e.g, query param)
+- Use `net/http` for API server on the back-end for simplicity and make less dependencies.
+- For the back-end project, it use dependency inversion to achieve low coupling.
+- Both front-end and back-end use mixing between vertical slice and horizontal slice architecture. For feature / domain specific codes, the codes will be inside the same working dir, maintain the code colocation close to each other. For shareable codes, it will be spread accross the main folder because relation for that code is the project instead of a feature.
+- Front-end and back-end deployment deployed on different container to have separate deployment.

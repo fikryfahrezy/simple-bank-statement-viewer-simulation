@@ -1,5 +1,5 @@
-// @title Go Simple API
-// @description A simple API writte in Go
+// @title Simple Bank Statement Viewer API
+// @description A simple API for simulate bank statement viewer written in Go
 // @version 1.0
 // @host localhost:8080
 // @BasePath /api

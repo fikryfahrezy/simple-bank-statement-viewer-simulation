@@ -1,5 +1,18 @@
 .backdrop {
+  position: absolute;
+  width: 100vw;
+  display: flex;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-4);
+  background-color: color-mix(in srgb, var(--color-black) 25%, transparent);
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
+  max-width: 500px;
+  width: 100%;
 }

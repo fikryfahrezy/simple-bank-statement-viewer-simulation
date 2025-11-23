@@ -3,7 +3,7 @@
 import styles from "./styles.module.css";
 import { Button } from "@/components/button";
 import { FileDropzone } from "@/components/file-dropzone";
-import { Plus } from "@/components/icons";
+import { File, Plus } from "@/components/icons";
 import { Modal } from "@/components/modal";
 import { noopAsync } from "@/utils/noop";
 import { FormEvent, useState } from "react";
@@ -18,7 +18,7 @@ export function UploadStatement({
   onUpload = noopAsync,
 }: UploadStatementProps) {
   const [modalOpen, setModalOpen] = useState(false);
-  const [files, setFiles] = useState<FileList>();
+  const [files, setFiles] = useState<FileList | null>(null);
 
   const openModal = () => {
     setModalOpen(true);
@@ -51,35 +51,48 @@ export function UploadStatement({
 
     onUpload(file).then(() => {
       closeModal();
+      setFiles(null);
     });
   };
 
   return (
     <>
       <Button onClick={openModal}>
-        <Plus /> Upload Statement
+        <Plus width={16} height={16} /> Upload Statement
       </Button>
       <Modal open={modalOpen}>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className={styles.form}>
           <FileDropzone
             multiple={false}
             onChange={setFiles}
             accept="text/csv"
             aria-label="File drop zone, click or press Enter/Space to select a file"
           >
-            <p>
-              {loading
-                ? "Uploading..."
-                : files
-                  ? "Your Statement File is Ready to Upload."
-                  : "Upload Your Transaction Statement in CSV Format."}
-            </p>
+            {loading ? (
+              <p>Uploading...</p>
+            ) : files ? (
+              <div className={styles.fileReadyContainer}>
+                <File />
+                Your Statement File is Ready to Upload.
+              </div>
+            ) : (
+              <p>Upload Your Transaction Statement in CSV Format.</p>
+            )}
           </FileDropzone>
           <div className={styles.modalFooter}>
-            <Button variant="secondary" type="button" onClick={closeModal}>
+            <Button
+              variant="secondary"
+              type="button"
+              className={styles.actionButton}
+              onClick={closeModal}
+            >
               Cancel
             </Button>
-            <Button variant="primary" type="submit">
+            <Button
+              variant="primary"
+              type="submit"
+              className={styles.actionButton}
+            >
               Upload
             </Button>
           </div>

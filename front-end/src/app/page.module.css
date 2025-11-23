@@ -1,8 +1,35 @@
+.main {
+  display: flex;
+  height: 100vh;
+  background-color: var(--color-subtle-gray);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.mainCard {
+  width: 100%;
+  max-width: 768px;
+}
+
+.mainCard > *:not(:last-child) {
+  margin-bottom: var(--space-4);
+}
+
 .header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 }
 
 .balance {
+  font-size: var(--text-xl);
+  line-height: var(--text-xl--line-height);
+  font-weight: 700;
 }
 
 .footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 }

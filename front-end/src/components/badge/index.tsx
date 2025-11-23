@@ -13,7 +13,7 @@ export const BADGE_VARIANTS: Record<BadgeVariant, string> = {
 };
 
 export function Badge({
-  className,
+  className = "",
   variant = "primary",
   ...restProps
 }: BadgeProps) {
@@ -21,7 +21,7 @@ export function Badge({
   return (
     <span
       {...restProps}
-      className={`${className} ${variantClass} ${styles.badge}`}
+      className={`${variantClass} ${styles.badge} ${className}`}
     />
   );
 }

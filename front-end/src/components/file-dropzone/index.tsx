@@ -11,7 +11,7 @@ export type FileDropzoneProps = Omit<
 };
 
 export function FileDropzone({
-  className,
+  className = "",
   children,
   onChange = noop,
   ...restProps
@@ -68,8 +68,7 @@ export function FileDropzone({
 
   return (
     <div
-      className={`${className} ${styles.zone}`}
-      style={style}
+      className={`${styles.zone} ${isDragging ? styles.zoneHighlighted : ""} ${className}`}
       tabIndex={0}
       role="button"
       aria-label={restProps["aria-label"]}
@@ -88,7 +87,6 @@ export function FileDropzone({
         aria-label="File Dropzone"
       />
       {children}
-      {isDragging && <p style={{ color: "darkgreen" }}>Drop now!</p>}
     </div>
   );
 }

@@ -1,5 +1,26 @@
+.tableContainer {
+  overflow-x: auto;
+}
+
 .paginationList {
+  display: flex;
+  list-style: none;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.pageButton {
+  width: 34px;
+  height: 34px;
+  aspect-ratio: 1;
+  font-size: var(--text-xs);
+  line-height: var(--text-xs--line-height);
 }
 
 .messageState {
+  width: 100%;
+  min-height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

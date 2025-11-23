@@ -1,4 +1,5 @@
 "use client";
+import { Badge, BadgeProps, BadgeVariant } from "@/components/badge";
 import styles from "./styles.module.css";
 import { Button } from "@/components/button";
 import {
@@ -58,7 +59,7 @@ export function TransactionTable({
   });
 
   return (
-    <div>
+    <div className={styles.tableContainer}>
       <Table>
         <TableHeader>
           <TableRow>
@@ -118,9 +119,13 @@ export function TransactionTable({
               <TableRow key={rowIndex}>
                 <TableCell>{row.timestamp}</TableCell>
                 <TableCell>{row.name}</TableCell>
-                <TableCell>{row.type}</TableCell>
+                <TableCell>
+                  <Badge>{row.type}</Badge>
+                </TableCell>
                 <TableCell>{row.amount}</TableCell>
-                <TableCell>{row.status}</TableCell>
+                <TableCell>
+                  <StatusBadge status={row.status}>{row.status}</StatusBadge>
+                </TableCell>
                 <TableCell>{row.description}</TableCell>
               </TableRow>
             );
@@ -187,7 +192,21 @@ export function SortIcon({
     }
   })();
 
-  return <Icon {...restProps} />;
+  return <Icon {...restProps} width={16} height={16} />;
+}
+
+const STATUS_BADGE_VARIANT: Record<TransactionStatus, BadgeVariant> = {
+  FAILED: "error",
+  PENDING: "warning",
+  SUCCESS: "primary",
+};
+
+export type StatusBadgeProps = BadgeProps & {
+  status: TransactionStatus;
+};
+
+export function StatusBadge({ status, ...restProps }: StatusBadgeProps) {
+  return <Badge {...restProps} variant={STATUS_BADGE_VARIANT[status]} />;
 }
 
 export type TransactionTablePagination = {
@@ -209,17 +228,17 @@ export function TransactionTablePagination({
   goToNextPage,
   goToPreviousPage,
 }: TransactionTablePagination) {
-  console.log(range(firstPage, lastPage));
   return (
     <nav role="navigation" aria-label="pagination">
       <ul className={styles.paginationList}>
         <li>
           <Button
             variant="secondary"
+            className={styles.pageButton}
             disabled={currentPage === 1}
             onClick={goToPreviousPage}
           >
-            <ChevronLeft />
+            <ChevronLeft width={16} height={16} />
           </Button>
         </li>
         {range(firstPage, lastPage).map((page) => {
@@ -227,6 +246,7 @@ export function TransactionTablePagination({
             <Button
               key={page}
               variant={page === currentPage ? "primary" : "secondary"}
+              className={styles.pageButton}
               onClick={() => {
                 goToPage(page);
               }}
@@ -238,10 +258,11 @@ export function TransactionTablePagination({
         <li>
           <Button
             variant="secondary"
-            disabled={currentPage === totalPages}
+            className={styles.pageButton}
+            disabled={currentPage >= totalPages}
             onClick={goToNextPage}
           >
-            <ChevronRight />
+            <ChevronRight width={16} height={16} />
           </Button>
         </li>
       </ul>

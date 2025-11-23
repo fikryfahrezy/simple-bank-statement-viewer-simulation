@@ -17,7 +17,7 @@ export const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
 export function Button<TAs extends React.ElementType = "button">({
   as: asProp,
   variant = "primary",
-  className,
+  className = "",
   ...restProps
 }: ButtonProps<TAs>) {
   const Comp = asProp || "button";
@@ -25,7 +25,7 @@ export function Button<TAs extends React.ElementType = "button">({
   return (
     <Comp
       {...restProps}
-      className={`${className} ${styles.button} ${variantClass}`}
+      className={`${styles.button} ${variantClass} ${className}`}
     />
   );
 }

@@ -120,10 +120,11 @@ export default function Page() {
   }, [getIssues, getBalance]);
 
   return (
-    <main>
-      <Card>
+    <main className={styles.main}>
+      <Card className={styles.mainCard}>
         <div className={styles.header}>
           <div>
+            <p>Total Balance:</p>
             <p className={styles.balance}>
               {balanceState === "loading"
                 ? "Loading..."

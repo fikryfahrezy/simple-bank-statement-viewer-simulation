@@ -1,2 +1,21 @@
 .modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+}
+
+.actionButton {
+  width: 100%;
+}
+
+.form > *:not(:last-child) {
+  margin-bottom: var(--space-2);
+}
+
+.fileReadyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
 }

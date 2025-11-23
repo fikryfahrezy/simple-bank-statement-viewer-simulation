@@ -1,11 +1,33 @@
 .button {
+  display: flex;
+  padding: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  appearance: none;
+  cursor: pointer;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  background-color: var(--color-subtle-gray);
+  color: var(--color-light-gray);
+  border-color: var(--color-light-gray);
 }
 
 .buttonPrimary {
+  background-color: var(--color-brand);
+  color: var(--color-white);
 }
 
 .buttonSecondary {
+  border: 1px solid;
+  border-color: var(--color-brand);
+  color: var(--color-brand);
 }
 
-.buttonGhost {
+.buttonGhost:hover {
+  background-color: var(--color-subtle-gray);
 }

@@ -113,9 +113,9 @@ export function TransactionTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedData.map((row) => {
+          {sortedData.map((row, rowIndex) => {
             return (
-              <TableRow key={row.timestamp}>
+              <TableRow key={rowIndex}>
                 <TableCell>{row.timestamp}</TableCell>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.type}</TableCell>
@@ -209,6 +209,7 @@ export function TransactionTablePagination({
   goToNextPage,
   goToPreviousPage,
 }: TransactionTablePagination) {
+  console.log(range(firstPage, lastPage));
   return (
     <nav role="navigation" aria-label="pagination">
       <ul className={styles.paginationList}>

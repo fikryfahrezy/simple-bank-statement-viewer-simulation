@@ -6,7 +6,7 @@ import { FileDropzone } from "@/components/file-dropzone";
 import { Plus } from "@/components/icons";
 import { Modal } from "@/components/modal";
 import { noopAsync } from "@/utils/noop";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 export type UploadStatementProps = {
   loading?: boolean;
@@ -28,7 +28,9 @@ export function UploadStatement({
     setModalOpen(false);
   };
 
-  const onSubmit = () => {
+  const onSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
     if (!files) {
       alert("Please upload the statment file in CSV format");
       return;

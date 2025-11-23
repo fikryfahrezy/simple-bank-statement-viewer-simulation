@@ -90,13 +90,6 @@ export default function Page() {
     router.push(pathname + "?" + newQueryString);
   };
 
-  const onUploadStatement = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    await uploadStatement(formData);
-  };
-
   const {
     pagedData,
     firstPage,
@@ -111,6 +104,15 @@ export default function Page() {
     limit: currentLimit,
     handlePageChange: onPageChange,
   });
+
+  const onUploadStatement = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    await uploadStatement(formData);
+    await Promise.all([getIssues(), getBalance()]);
+    onPageChange(totalPages);
+  };
 
   useEffect(() => {
     getIssues();

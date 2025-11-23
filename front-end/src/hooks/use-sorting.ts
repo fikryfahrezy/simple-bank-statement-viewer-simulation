@@ -29,7 +29,7 @@ export function useSorting<TData extends object>({
     let nextKey: keyof TData | null = newKey;
     let nextOrder: SortOrder | null = null;
 
-    if (order === null) {
+    if (order === null || newKey !== key) {
       nextOrder = "DESC";
     } else if (order === "DESC") {
       nextOrder = "ASC";

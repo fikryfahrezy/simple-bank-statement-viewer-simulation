@@ -25,7 +25,7 @@ export class TransactionService {
     const url = `${this.baseURL}/upload`;
     try {
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         body: formData,
       });
       const resBody = (await response.json()) as Response<null>;

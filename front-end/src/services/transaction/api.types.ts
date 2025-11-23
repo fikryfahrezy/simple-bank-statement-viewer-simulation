@@ -7,12 +7,16 @@ export type Response<TData> = {
   result: TData;
 };
 
+export type TransactionType = "DEBIT" | "CREDIT";
+
+export type TransactionStatus = "SUCCESS" | "PENDING" | "FAILED";
+
 export type IssueResponse = {
   timestamp: string;
   name: string;
-  type: string;
+  type: TransactionType;
   amount: number;
-  status: string;
+  status: TransactionStatus;
   description: string;
 };
 

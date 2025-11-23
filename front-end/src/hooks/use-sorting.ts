@@ -1,17 +1,18 @@
-import { useState } from "react";
-
 export type SortOrder = "ASC" | "DESC";
 
 export type UseSoringOptions<TData extends object> = {
   data: TData[];
+  key: keyof TData | null;
+  order: SortOrder | null;
+  onSortChange: (key: keyof TData | null, order: SortOrder | null) => void;
 };
 
 export function useSorting<TData extends object>({
   data,
+  key,
+  order,
+  onSortChange,
 }: UseSoringOptions<TData>) {
-  const [key, setKey] = useState<keyof TData | null>(null);
-  const [order, setOrder] = useState<SortOrder | null>(null);
-
   const sortedData =
     key === null || order === null
       ? data
@@ -21,7 +22,7 @@ export function useSorting<TData extends object>({
             .localeCompare(String(b[key]).toLowerCase());
         });
 
-  const toggleOrder = (newKey: keyof TData) => {
+  const toggleOrder = (newKey: keyof TData | null) => {
     let nextKey: keyof TData | null = newKey;
     let nextOrder: SortOrder | null = null;
 
@@ -34,8 +35,7 @@ export function useSorting<TData extends object>({
       nextKey = null;
     }
 
-    setKey(nextKey);
-    setOrder(nextOrder);
+    onSortChange(nextKey, nextOrder);
   };
 
   return { sortedData, key, order, toggleOrder };

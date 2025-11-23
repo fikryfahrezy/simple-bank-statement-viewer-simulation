@@ -16,6 +16,11 @@
   margin-bottom: var(--space-4);
 }
 
+.title {
+  font-size: var(--text-xxxl);
+  line-height: var(--text-xxxl--line-height);
+}
+
 .header {
   display: flex;
   align-items: flex-end;

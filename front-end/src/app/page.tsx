@@ -123,6 +123,7 @@ export default function Page() {
   return (
     <main className={styles.main}>
       <Card className={styles.mainCard}>
+        <h1 className={styles.title}>Bank Statement Viewer</h1>
         <div className={styles.header}>
           <div>
             <p>Total Balance:</p>

@@ -23,6 +23,7 @@ import {
   TransactionType,
 } from "@/services/transaction/api.types";
 import { range } from "@/utils/array";
+import { idTimeFormat } from "@/utils/date";
 
 export type TransactionRow = {
   timestamp: string;
@@ -69,7 +70,7 @@ export function TransactionTable({
               sortOrder={order}
               toggleOrder={toggleOrder}
             >
-              Timestamp
+              Time
             </TransactionTableHead>
             <TransactionTableHead
               currentSortKey={key}
@@ -117,7 +118,7 @@ export function TransactionTable({
           {sortedData.map((row, rowIndex) => {
             return (
               <TableRow key={rowIndex}>
-                <TableCell>{row.timestamp}</TableCell>
+                <TableCell>{idTimeFormat(row.timestamp)}</TableCell>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>
                   <Badge>{row.type}</Badge>

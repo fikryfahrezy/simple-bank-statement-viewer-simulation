@@ -23,7 +23,7 @@ func TestTransactionService_GetBalance_Success(t *testing.T) {
 	transactionService := service.NewTransactionService(log, transactionsRepo)
 	ctx := context.Background()
 
-	expectedTransaction := model.Transaction{
+	firstTransaction := model.Transaction{
 		Timestamp:   1624507883,
 		Name:        "JOHN DOE",
 		Type:        model.TransactionTypeDebit,
@@ -31,13 +31,31 @@ func TestTransactionService_GetBalance_Success(t *testing.T) {
 		Status:      model.TransactionStatusSuccess,
 		Description: "restaurant",
 	}
+	secondTransaction := model.Transaction{
+		Timestamp:   1624608050,
+		Name:        "COMPANY A",
+		Type:        model.TransactionTypeCredit,
+		Amount:      12000000,
+		Status:      model.TransactionStatusSuccess,
+		Description: "salary",
+	}
+	thirdTransaction := model.Transaction{
+		Timestamp:   1624608050,
+		Name:        "E-COMMERCE A",
+		Type:        model.TransactionTypeDebit,
+		Amount:      150000,
+		Status:      model.TransactionStatusFailed,
+		Description: "clothes",
+	}
 
 	transactions := db.Table["transactions"]
-	transactions = append(transactions, expectedTransaction)
+	transactions = append(transactions, firstTransaction)
+	transactions = append(transactions, secondTransaction)
+	transactions = append(transactions, thirdTransaction)
 	db.Table["transactions"] = transactions
 
 	result, err := transactionService.GetBalance(ctx)
 
 	assert.NoError(t, err)
-	assert.Equal(t, float64(0), result.Balance)
+	assert.Equal(t, float64(11750000), result.Balance)
 }

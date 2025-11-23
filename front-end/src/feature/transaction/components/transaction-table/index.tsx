@@ -71,7 +71,7 @@ export function TransactionTable({
               sortOrder={order}
               toggleOrder={toggleOrder}
             >
-              Time
+              Timestamp
             </TransactionTableHead>
             <TransactionTableHead
               currentSortKey={key}

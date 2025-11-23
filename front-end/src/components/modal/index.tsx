@@ -26,7 +26,7 @@ export function Modal({ open = false, children }: ModalProps) {
   }
 
   return createPortal(
-    <div className={styles.backdrop}>
+    <div className={styles.backdrop} role="dialog">
       <Card ref={modalContentRef} className={styles.container}>
         {children}
       </Card>

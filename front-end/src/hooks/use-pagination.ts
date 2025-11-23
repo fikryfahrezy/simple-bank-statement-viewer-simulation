@@ -1,4 +1,4 @@
-function noop() {}
+import { noop } from "@/utils/noop";
 
 export type UsePaginationOptions<TData extends object> = {
   data: TData[];
@@ -13,12 +13,16 @@ export function usePagination<TData extends object>({
   limit,
   handlePageChange = noop,
 }: UsePaginationOptions<TData>) {
-  const totalPages = data.length;
+  const totalPages = Math.floor((data.length + limit - 1) / limit);
   const lastPage = Math.min(Math.max(currentPage + 2, 5), totalPages);
   const firstPage = Math.max(1, lastPage - 4);
 
   const offset = (currentPage - 1) * limit;
   const pagedData = data.slice(offset, limit);
+
+  const goToPage = (page: number): void => {
+    handlePageChange(page);
+  };
 
   const goToNextPage = (): void => {
     const newPage = Math.min(currentPage + 1, totalPages);
@@ -34,7 +38,9 @@ export function usePagination<TData extends object>({
     pagedData,
     firstPage,
     lastPage,
+    goToPage,
     goToPreviousPage,
     goToNextPage,
+    totalPages,
   };
 }

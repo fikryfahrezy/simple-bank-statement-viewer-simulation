@@ -1,7 +1,7 @@
 # Simple Bank Statement Viewer Simulation
 
-Web : https://bank-statement-viewer.fahrezy.work
-API : https://api-bank-statement-viewer.fahrezy.work/swagger
+- https://bank-statement-viewer.fahrezy.work
+- https://api-bank-statement-viewer.fahrezy.work/swagger
 
 ## Front End
 
@@ -185,3 +185,17 @@ make build-production
 - For the back-end project, it use dependency inversion to achieve low coupling.
 - Both front-end and back-end use mixing between vertical slice and horizontal slice architecture. For feature / domain specific codes, the codes will be inside the same working dir, maintain the code colocation close to each other. For shareable codes, it will be spread accross the main folder because relation for that code is the project instead of a feature.
 - Front-end and back-end deployment deployed on different container to have separate deployment.
+
+
+## Screenshot
+
+| Image | Description | 
+| ------ | ------ |
+| <img src="./screenshot_1.png" alt="Screenshot One" width="500px"/> | Statement already uploaded |
+| <img src="./screenshot_2.png" alt="Screenshot Two" width="500px"/> | Uploading statement file |
+| <img src="./screenshot_3.png" alt="Screenshot Three" width="500px"/> | Empty state |
+
+
+## Demo
+
+https://drive.google.com/file/d/1BvmbwDbIMe_0JTmTezmoBNtbb8gSoKH6/view

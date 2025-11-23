@@ -24,6 +24,7 @@ import {
 } from "@/services/transaction/api.types";
 import { range } from "@/utils/array";
 import { idTimeFormat } from "@/utils/date";
+import { idrFormatter } from "@/utils/currency";
 
 export type TransactionRow = {
   timestamp: string;
@@ -123,7 +124,7 @@ export function TransactionTable({
                 <TableCell>
                   <Badge>{row.type}</Badge>
                 </TableCell>
-                <TableCell>{row.amount}</TableCell>
+                <TableCell>{idrFormatter(row.amount)}</TableCell>
                 <TableCell>
                   <StatusBadge status={row.status}>{row.status}</StatusBadge>
                 </TableCell>

@@ -43,8 +43,7 @@ func TestTransactionService_CreateTransaction_Success(t *testing.T) {
 	newTransactions := db.Table["transactions"]
 	assert.Equal(t, 4, len(newTransactions))
 
-	var actualFirstTransaction model.Transaction
-	actualFirstTransaction = newTransactions[0].(model.Transaction)
+	actualFirstTransaction := newTransactions[0].(model.Transaction)
 
 	assert.Equal(t, int64(1624507883), actualFirstTransaction.Timestamp)
 	assert.Equal(t, "JOHN DOE", actualFirstTransaction.Name)
@@ -53,8 +52,7 @@ func TestTransactionService_CreateTransaction_Success(t *testing.T) {
 	assert.Equal(t, model.TransactionStatusSuccess, actualFirstTransaction.Status)
 	assert.Equal(t, "restaurant", actualFirstTransaction.Description)
 
-	var actualSecondTransaction model.Transaction
-	actualSecondTransaction = newTransactions[1].(model.Transaction)
+	actualSecondTransaction := newTransactions[1].(model.Transaction)
 
 	assert.Equal(t, int64(1624608050), actualSecondTransaction.Timestamp)
 	assert.Equal(t, "E-COMMERCE A", actualSecondTransaction.Name)
@@ -63,8 +61,7 @@ func TestTransactionService_CreateTransaction_Success(t *testing.T) {
 	assert.Equal(t, model.TransactionStatusFailed, actualSecondTransaction.Status)
 	assert.Equal(t, "clothes", actualSecondTransaction.Description)
 
-	var actualThirdTransaction model.Transaction
-	actualThirdTransaction = newTransactions[2].(model.Transaction)
+	actualThirdTransaction := newTransactions[2].(model.Transaction)
 
 	assert.Equal(t, int64(1624512883), actualThirdTransaction.Timestamp)
 	assert.Equal(t, "COMPANY A", actualThirdTransaction.Name)
@@ -73,8 +70,7 @@ func TestTransactionService_CreateTransaction_Success(t *testing.T) {
 	assert.Equal(t, model.TransactionStatusSuccess, actualThirdTransaction.Status)
 	assert.Equal(t, "salary", actualThirdTransaction.Description)
 
-	var actualFourthTransaction model.Transaction
-	actualFourthTransaction = newTransactions[3].(model.Transaction)
+	actualFourthTransaction := newTransactions[3].(model.Transaction)
 
 	assert.Equal(t, int64(1624615065), actualFourthTransaction.Timestamp)
 	assert.Equal(t, "E-COMMERCE B", actualFourthTransaction.Name)

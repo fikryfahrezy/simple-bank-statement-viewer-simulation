@@ -1,0 +1,257 @@
+"use client";
+import styles from "./styles.module.css";
+import { Button } from "@/components/button";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsUpDown,
+  ChevronUp,
+} from "@/components/icons";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/table";
+import { SortOrder, useSorting } from "@/hooks/use-sorting";
+import {
+  TransactionStatus,
+  TransactionType,
+} from "@/services/transaction/api.types";
+import { range } from "@/utils/array";
+
+export type TransactionRow = {
+  timestamp: string;
+  name: string;
+  type: TransactionType;
+  amount: number;
+  status: TransactionStatus;
+  description: string;
+};
+
+export type TransactionTableProps = {
+  rows: TransactionRow[];
+  loading?: boolean;
+  sortKey: keyof TransactionRow | null;
+  sortOrder: SortOrder | null;
+  onSortChange: (
+    key: keyof TransactionRow | null,
+    order: SortOrder | null,
+  ) => void;
+};
+
+export function TransactionTable({
+  rows,
+  loading = false,
+  sortKey,
+  sortOrder,
+  onSortChange,
+}: TransactionTableProps) {
+  const { sortedData, toggleOrder, order, key } = useSorting({
+    data: rows,
+    key: sortKey,
+    order: sortOrder,
+    onSortChange,
+  });
+
+  return (
+    <div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TransactionTableHead
+              currentSortKey={key}
+              sortKey="timestamp"
+              sortOrder={order}
+              toggleOrder={toggleOrder}
+            >
+              Timestamp
+            </TransactionTableHead>
+            <TransactionTableHead
+              currentSortKey={key}
+              sortKey="name"
+              sortOrder={order}
+              toggleOrder={toggleOrder}
+            >
+              Name
+            </TransactionTableHead>
+            <TransactionTableHead
+              currentSortKey={key}
+              sortKey="type"
+              sortOrder={order}
+              toggleOrder={toggleOrder}
+            >
+              Type
+            </TransactionTableHead>
+            <TransactionTableHead
+              currentSortKey={key}
+              sortKey="amount"
+              sortOrder={order}
+              toggleOrder={toggleOrder}
+            >
+              Amount
+            </TransactionTableHead>
+            <TransactionTableHead
+              currentSortKey={key}
+              sortKey="status"
+              sortOrder={order}
+              toggleOrder={toggleOrder}
+            >
+              Status
+            </TransactionTableHead>
+            <TransactionTableHead
+              currentSortKey={key}
+              sortKey="description"
+              sortOrder={order}
+              toggleOrder={toggleOrder}
+            >
+              Description
+            </TransactionTableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {sortedData.map((row) => {
+            return (
+              <TableRow key={row.timestamp}>
+                <TableCell>{row.timestamp}</TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.type}</TableCell>
+                <TableCell>{row.amount}</TableCell>
+                <TableCell>{row.status}</TableCell>
+                <TableCell>{row.description}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+      {loading && <TransactionTableLoading />}
+      {sortedData.length === 0 && <TransactionTableEmpty />}
+    </div>
+  );
+}
+
+export type TransactionTableHeadProps = {
+  currentSortKey: keyof TransactionRow | null;
+  sortKey: keyof TransactionRow | null;
+  toggleOrder: (newKey: keyof TransactionRow | null) => void;
+  sortOrder: SortOrder | null;
+  children?: React.ReactNode;
+};
+
+export function TransactionTableHead({
+  children,
+  currentSortKey,
+  sortKey,
+  toggleOrder,
+  sortOrder,
+}: TransactionTableHeadProps) {
+  const onSort = () => {
+    toggleOrder(sortKey);
+  };
+
+  return (
+    <TableHead>
+      <Button variant="ghost" onClick={onSort}>
+        {children}
+        <SortIcon active={sortKey === currentSortKey} sortOrder={sortOrder} />
+      </Button>
+    </TableHead>
+  );
+}
+
+export type SortIconProps = React.ComponentProps<"svg"> & {
+  active?: boolean;
+  sortOrder: SortOrder | null;
+};
+
+export function SortIcon({
+  sortOrder,
+  active = false,
+  ...restProps
+}: SortIconProps) {
+  const Icon = (() => {
+    if (!active) {
+      return ChevronsUpDown;
+    }
+
+    switch (sortOrder) {
+      case "ASC":
+        return ChevronUp;
+      case "DESC":
+        return ChevronDown;
+      default:
+        return ChevronsUpDown;
+    }
+  })();
+
+  return <Icon {...restProps} />;
+}
+
+export type TransactionTablePagination = {
+  currentPage: number;
+  firstPage: number;
+  lastPage: number;
+  totalPages: number;
+  goToPage: (page: number) => void;
+  goToNextPage: () => void;
+  goToPreviousPage: () => void;
+};
+
+export function TransactionTablePagination({
+  currentPage,
+  firstPage,
+  lastPage,
+  totalPages,
+  goToPage,
+  goToNextPage,
+  goToPreviousPage,
+}: TransactionTablePagination) {
+  return (
+    <nav role="navigation" aria-label="pagination">
+      <ul className={styles.paginationList}>
+        <li>
+          <Button
+            variant="secondary"
+            disabled={currentPage === 1}
+            onClick={goToPreviousPage}
+          >
+            <ChevronLeft />
+          </Button>
+        </li>
+        {range(firstPage, lastPage).map((page) => {
+          return (
+            <Button
+              key={page}
+              variant={page === currentPage ? "primary" : "secondary"}
+              onClick={() => {
+                goToPage(page);
+              }}
+            >
+              {page}
+            </Button>
+          );
+        })}
+        <li>
+          <Button
+            variant="secondary"
+            disabled={currentPage === totalPages}
+            onClick={goToNextPage}
+          >
+            <ChevronRight />
+          </Button>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
+export function TransactionTableLoading() {
+  return <div className={styles.messageState}>Loading</div>;
+}
+
+export function TransactionTableEmpty() {
+  return <div className={styles.messageState}>No Data</div>;
+}

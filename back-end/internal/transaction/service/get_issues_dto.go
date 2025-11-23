@@ -17,7 +17,7 @@ type IssueResponse struct {
 
 func ToIssuesResponse(u model.Transaction) IssueResponse {
 	return IssueResponse{
-		Timestamp:   time.Unix(u.Timestamp, 0),
+		Timestamp:   time.Unix(u.Timestamp, 0).UTC(),
 		Name:        u.Name,
 		Type:        u.Type,
 		Amount:      u.Amount,

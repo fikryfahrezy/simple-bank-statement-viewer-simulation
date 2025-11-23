@@ -65,12 +65,12 @@ func ParseCSV(file io.Reader) ([]model.Transaction, map[string]any) {
 		rawTimestamp := strings.TrimSpace(record[0])
 		timestamp, err := strconv.ParseInt(rawTimestamp, 10, 64)
 		if err != nil {
-			errors = append(errors, "invalid 'timestamp', expected to be integer")
+			errors = append(errors, "Invalid 'timestamp', expected to be integer")
 		}
 
 		rawName := strings.TrimSpace(record[1])
 		if rawName == "" {
-			errors = append(errors, "'name' is required")
+			errors = append(errors, "The 'name' is required")
 		}
 
 		rawType := model.TransactionType(strings.TrimSpace(record[2]))
@@ -81,7 +81,7 @@ func ParseCSV(file io.Reader) ([]model.Transaction, map[string]any) {
 		rawAmount := strings.TrimSpace(record[3])
 		amount, err := strconv.ParseFloat(rawAmount, 64)
 		if err != nil {
-			errors = append(errors, "invalid 'amount', expected to be number")
+			errors = append(errors, "Invalid 'amount', expected to be number")
 		}
 
 		rawStatus := model.TransactionStatus(strings.TrimSpace(record[4]))
@@ -90,8 +90,8 @@ func ParseCSV(file io.Reader) ([]model.Transaction, map[string]any) {
 		}
 
 		rawDescription := strings.TrimSpace(record[5])
-		if rawName == "" {
-			errors = append(errors, "'description' is required")
+		if rawDescription == "" {
+			errors = append(errors, "The 'description' is required")
 		}
 
 		if len(errors) == 0 {

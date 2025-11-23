@@ -19,7 +19,7 @@ func (s *transactionService) UploadStatement(ctx context.Context, req UploadRequ
 		s.log.Error("CSV validation fail",
 			slog.Any("error", errorMap),
 		)
-		return fmt.Errorf("csv validation fail")
+		return &ParseError{Fields: errorMap}
 	}
 
 	if err := s.transactionRepository.Store(ctx, transactions); err != nil {
@@ -29,11 +29,11 @@ func (s *transactionService) UploadStatement(ctx context.Context, req UploadRequ
 	return nil
 }
 
-func ParseCSV(file io.Reader) ([]model.Transaction, map[string][]string) {
+func ParseCSV(file io.Reader) ([]model.Transaction, map[string]any) {
 	reader := csv.NewReader(file)
 
-	keyPrefix := "file"
-	errorMap := map[string][]string{}
+	keyPrefix := "line"
+	errorMap := map[string]any{}
 	transactions := []model.Transaction{}
 	line := 0
 

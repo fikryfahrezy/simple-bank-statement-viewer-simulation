@@ -54,6 +54,10 @@ func (h *TransactionHandler) Upload(w http.ResponseWriter, r *http.Request) {
 
 	err = h.transactionService.UploadStatement(r.Context(), req)
 	if err != nil {
+		if ve, ok := err.(*service.ParseError); ok {
+			http_server.ValidationErrorResponse(w, "Validation failed", ve.Fields)
+			return
+		}
 		h.translateServiceError(w, err, "Failed to upload statement")
 		return
 	}

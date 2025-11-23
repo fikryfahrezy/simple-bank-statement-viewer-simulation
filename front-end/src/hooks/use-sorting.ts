@@ -17,9 +17,12 @@ export function useSorting<TData extends object>({
     key === null || order === null
       ? data
       : data.toSorted((a, b) => {
-          return String(a[key])
-            .toLowerCase()
-            .localeCompare(String(b[key]).toLowerCase());
+          const strA = String(a[key]).toLowerCase();
+          const strB = String(b[key]).toLowerCase();
+          if (order === "DESC") {
+            return strB.localeCompare(strA);
+          }
+          return strA.localeCompare(strB);
         });
 
   const toggleOrder = (newKey: keyof TData | null) => {
